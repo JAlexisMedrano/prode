@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario Dinámico</title>
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url(https://www.ole.com.ar/2023/08/15/IH-zsrv1y_1290x760__1.jpg);
+      color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 2.5rem;
+    }
+
+    form {
+      background: #6c80c054;
+      color: #f0ecec;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 500px;
+      margin: 20px auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    label {
+      font-size: 1rem;
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input[type="text"], input[type="tel"], input[type="radio"] {
+      margin-bottom: 10px;
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #2575fc;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1a5bb8;
+    }
+
+    table {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 800px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #fff;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #2575fc;
+      color: #fff;
+    }
+
+    td {
+      background: #6b11cb80;
+      color: #fff;
+    }
+
+    /* Modal de confirmación */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: #6974d4a9;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal-button {
+      background-color: #2575fc;
+      color: rgb(22, 20, 20);
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .modal-content h2{
+        color: black;
+    }
+
+    .modal-button:hover {
+      background-color: #1a5bb8;
+    }
+
+    /* Estilo para la tarjeta de pregunta */
+    .question-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #352e2e88;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-text {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .options {
+      display: flex;
+    }
+
+    .options label {
+      margin-right: 10px;
+      margin-bottom: 5px;
+    }
+
+    .custom-input {
+      margin-top: 10px;
+      display: block;
+      width: 5%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #dynamicForm input{
+        width: 90%;
+      }
+
+    /* Media Queries para Responsividad */
+    @media (max-width: 768px) {
+      form {
+        padding: 15px;
+        width: 90%;
+      }
+
+      .question-card {
+        width: 90%;
+      }
+      .options label{
+        font-size: 12px;
+      }
+      .custom-input {
+        width: 40px;
+      }
+      #dynamicForm input{
+        width: 90%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .question-card {
+        width: 90%;
+        padding: 10px;
+      }
+
+      .custom-input {
+        width: 80%;
+      }
+    }
+     /* Estilos para el contenedor de resultados */
+  #resultContainer {
+    display: none;
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #2a3b596e;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    color: #fff;
+  }
+
+  #resultContainer h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ff7f50;
+  }
+
+  #resultContainer h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #ff7f50;
+  }
+
+  #resultContainer p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+
+  #resultContainer p strong {
+    color: #f4f4f4;
+  }
+
+  #resultContainer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #resultContainer li {
+    background-color: #3c4a6b;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  #resultContainer li strong {
+    color: #ff7f50;
+  }
+
+  /* Estilo para los botones de acción */
+  .action-button {
+    background-color: #2574fc5e;
+    color: #fff;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: 20px;
+  }
+
+  .action-button:hover {
+    background-color: #1a5bb8;
+  }
+  </style>
+</head>
+<body>
+  <h1>PRODE TODO DIGITAL</h1>
+  <form id="dynamicForm">
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="phone">Teléfono:</label>
+    <input type="tel" id="phone" name="phone" required>
+
+    <div id="questionsContainer"></div>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <!-- Modal de confirmación -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <h2>¿Estás seguro de enviar las respuestas?</h2>
+      <button id="confirmButton" class="modal-button">Sí</button>
+      <button id="cancelButton" class="modal-button">No</button>
+    </div>
+  </div>
+
+  <div id="resultContainer"></div>
+
+  <script>
+    const form = document.getElementById("dynamicForm");
+    const questionsContainer = document.getElementById("questionsContainer");
+    const resultContainer = document.getElementById("resultContainer");
+    const confirmationModal = document.getElementById("confirmationModal");
+    const confirmButton = document.getElementById("confirmButton");
+    const cancelButton = document.getElementById("cancelButton");
+
+    // URLs de los contenedores de JSONBin
+    const QUESTIONS_API_URL = "https://api.jsonbin.io/v3/b/67957f60ad19ca34f8f46993";  // Reemplaza con tu ID de contenedor de preguntas
+    const ANSWERS_API_URL = "https://api.jsonbin.io/v3/b/67957888acd3cb34a8d2e93a";  // Reemplaza con tu ID de contenedor de respuestas
+    const JSONBIN_API_KEY = "$2a$10$o3q3pxXpujRJF8FxZz.mHOU/aukXSBNiGrC3hhMVlIJeqZP0rMc3W";  // Reemplaza con tu clave API de JSONBin
+
+    // Cargar preguntas dinámicamente desde JSONBin
+    async function loadQuestions() {
+      try {
+        const response = await fetch(QUESTIONS_API_URL, {
+          method: "GET",
+          headers: {
+            "X-Master-Key": JSONBIN_API_KEY,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al cargar las preguntas.");
+        }
+
+        const data = await response.json();
+        const questions = data.record.questions;
+
+        // Renderizar las preguntas en el formulario
+        questions.forEach((question, index) => {
+          const questionHTML = `
+            <div class="question-card">
+              <div class="question-text">
+                <p>${question.text}</p>
+              </div>
+              <div class="options">
+                ${question.options
+                  .map(
+                    (option) => `
+                  <label>
+                    <input type="radio" name="question-${index + 1}" value="${option}" required>
+                    ${option}
+                  </label>
+                `
+                  )
+                  .join("")}
+             
+                <label for="customInput-${index + 1}"></label>
+                <input type="text" id="customInput-${index + 1}" name="customInput-${index + 1}" class="custom-input" placeholder="Resultado ej: 3- 1">
+              </div>
+            </div>
+          `;
+          questionsContainer.insertAdjacentHTML("beforeend", questionHTML);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // Mostrar el modal de confirmación
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      confirmationModal.style.display = "block";
+    });
+
+    confirmButton.addEventListener("click", async () => {
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+
+      const questions = Array.from(questionsContainer.querySelectorAll(".question-card")).map((question, index) => {
+        const questionText = question.querySelector(".question-text p").textContent;
+        const selectedOption = question.querySelector(`input[name="question-${index + 1}"]:checked`)?.value || "No seleccionada";
+        const customInput = question.querySelector(`#customInput-${index + 1}`).value || "Sin valor";
+
+        return { question: questionText, answer: selectedOption, customInput };
+      });
+
+      const userId = Date.now(); // Usamos el timestamp como ID único
+
+      const data = { userId, name, phone, questions };
+
+      try {
+        const response = await fetch(ANSWERS_API_URL, {
+          method: "GET",
+          headers: {
+            "X-Master-Key": JSONBIN_API_KEY,
+          },
+        });
+
+        const currentData = await response.json();
+
+        // Asegurarnos de que 'answers' exista en el objeto 'record'
+        if (!currentData.record.answers) {
+          currentData.record.answers = []; // Si no existe, inicializamos como un array vacío
+        }
+
+        currentData.record.answers.push(data); // Agregar la respuesta al array de respuestas
+
+        // Guardar las respuestas
+        const updateResponse = await fetch(ANSWERS_API_URL, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": JSONBIN_API_KEY,
+          },
+          body: JSON.stringify(currentData),
+        });
+
+        if (!updateResponse.ok) {
+          throw new Error("Error al guardar las respuestas.");
+        }
+
+        confirmationModal.style.display = "none";
+        resultContainer.style.display = "block";
+
+        // Limpiar el formulario y mostrar los datos enviados
+        form.remove();
+        resultContainer.innerHTML = `
+          <h2>Gracias por tu participación</h2>
+          <p><strong>Nombre:</strong> ${name}</p>
+          <p><strong>Teléfono:</strong> ${phone}</p>
+          <h3>Respuestas:</h3>
+          <ul>
+            ${questions
+              .map(
+                (q) => `
+                <li><strong>${q.question}:</strong> ${q.answer} (Valor personalizado: ${q.customInput})</li>
+              `
+              )
+              .join("")}
+          </ul>
+        `;
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    cancelButton.addEventListener("click", () => {
+      confirmationModal.style.display = "none";
+    });
+
+    // Cargar las preguntas cuando se carga la página
+    loadQuestions();
+  </script>
+</body>
+</html>
