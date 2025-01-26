@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formulario Dinámico</title>
+  <title>Prode TD</title>
   <style>
     /* Estilos generales */
     body {
@@ -421,7 +421,7 @@
             ${questions
               .map(
                 (q) => `
-                <li><strong>${q.question}:</strong> ${q.answer} (Valor personalizado: ${q.customInput})</li>
+                <li><strong>${q.question}:</strong> ${q.answer} (Resultado: ${q.customInput})</li>
               `
               )
               .join("")}
